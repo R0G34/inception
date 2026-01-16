@@ -1,4 +1,4 @@
-FROM debian_bookworm-slim
+FROM debian:bookworm-slim
 
 RUN apt-get update && apt-get install -y \
 	php \
@@ -12,7 +12,9 @@ RUN apt-get update && apt-get install -y \
 	php-zip \
 	curl \
 	mariadb-client \
-	&& rm rf /var/lib/apt/lists/*
+	&& rm -rf /var/lib/apt/lists/*
+
+RUN sed -i 's|^listen = .*|listen = 9000|' /etc/php/8.2/fpm/pool.d/www.conf
 
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
 	&& chmod +x wp-cli.phar \

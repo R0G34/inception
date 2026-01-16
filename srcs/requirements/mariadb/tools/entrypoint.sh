@@ -1,11 +1,13 @@
 #!/bin/bash
 set -e
 
+echo ">> MariaDB entrypoint running"
+
 chown -R mysql:mysql /var/lib/mysql
 chown -R mysql:mysql /run/mysqld
 
-if [ ! -d "/var/lib/mysql/mysql" ]; then
-	echo "Initializating MariaDB..."
+if [ ! -d "/var/lib/mysql/${MYSQL_DATABASE}" ]; then
+	echo "Initializating MariaDB and user"
 
 	mysql_install_db --user=mysql --datadir=/var/lib/mysql > /dev/null
 
@@ -16,12 +18,11 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
 		sleep 1
 	done
 
-	mysql -u root <<-EOSQL
-		CREATE DATABASE IF NOT EXISTS \'${MYSQL_DATABASE}\';
-		CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
-		GRANT ALL PRIVILEGES ON \'${MYSQL_DATABASE}\'.* TO '${MYSQL_USER}'@'%';
-		ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
-		FUSH PRIVILEGES;
+	mysql -u root <<EOSQL
+CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
+CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
+FLUSH PRIVILEGES;
 EOSQL
 
 	mysqladmin -u root -p"${MYSQL_ROOT_PASSWORD}" shutdown
