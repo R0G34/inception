@@ -7,7 +7,7 @@ if [ ! -f /etc/nginx/ssl/server.crt ]; then
 		-newkey rsa:2048 \
 		-keyout /etc/nginx/ssl/server.key \
 		-out /etc/nginx/ssl/server.crt \
-		-subj "/C=ES/ST=Madrid/L=Madrid/O=42/OU=Inception/CN=login.42.fr"
+		-subj "/C=ES/ST=Madrid/L=Madrid/O=42/OU=Inception/CN=abausa-v.42.fr"
 fi
 
 exec "$@"
