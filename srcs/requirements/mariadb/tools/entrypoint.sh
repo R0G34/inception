@@ -25,7 +25,7 @@ GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
 FLUSH PRIVILEGES;
 EOSQL
 
-	mysqladmin -u root -p"${MYSQL_ROOT_PASSWORD}" shutdown
+	mysqladmin -u root shutdown
 	wait "$pid"
 	echo "MariaDB initialized."
 fi
