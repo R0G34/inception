@@ -1,38 +1,20 @@
-NAME		:= inception
-COMPOSE		:= docker compose -f srcs/docker-compose.yml
-USER		:= $(shell whoami)
-DATA_DIR	:= /home/$(USER)/data
-DB_DIR		:= $(DATA_DIR)/mariadb
-WP_DIR		:= $(DATA_DIR)/wordpress
+DOCKER_COMPOSE_FILE = ./srcs/docker-compose.yml
 
-.PHONY: all up down build re clean fclean ps logs dirs
-
-all: up
-
-dirs:
-	@mkdir -p $(DB_DIR) $(WP_DIR)
-
-up: dirs
-	@$(COMPOSE) up -d --build
-
-down:
-	@$(COMPOSE) down
-
+all: build run
 build:
-	@$(COMPOSE) build
+	mkdir -p /home/abausa-v/data/mariadb
+	mkdir -p /home/abausa-v/data/wordpress
+	docker compose  -f $(DOCKER_COMPOSE_FILE) up --build -d
+run:
+	docker compose -f $(DOCKER_COMPOSE_FILE) up -d
+down:
+	docker compose -f $(DOCKER_COMPOSE_FILE) down
+clean:
+	docker compose -f $(DOCKER_COMPOSE_FILE) down -v
 
-ps:
-	@$(COMPOSE) ps
+fclean: clean
+	docker system prune -a -f
+	sudo rm -rf /home/abausa-v/data/mariadb
+	sudo rm -rf /home/abausa-v/data/wordpress
 
-logs:
-	@$(COMPOSE) logs -f
-
-clean: down
-	@docker image prune -f >/dev/null 2>&1 || true
-
-fclean: down
-	@$(COMPOSE) down -v
-	@docker image prune -af >/dev/null/ 2>&1 || true
-	@docker volume prune -f >/dev/null/ 2>&1 || true
-
-re: fclean up
+re: down fclean build run
