@@ -7,10 +7,12 @@ RUN apt-get update && apt-get install -y \
 
 RUN mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld
 
+COPY conf/my.cnf /etc/mysql/mariadb.conf.d/99-inception.cnf
+
 COPY tools/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 3306
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD ["mysqld", "--user=mysql", "--bind-address=0.0.0.0"]
+CMD ["mysqld"]
