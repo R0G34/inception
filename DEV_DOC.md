@@ -51,21 +51,21 @@ The `.env` file is located in `srcs/.env` and contains all sensitive configurati
 The project uses bind mounts to persist data on the host machine.
 
 **Data Directories**:
-- MariaDB data: `/home/aohssine/data/mariadb`
-- WordPress files: `/home/aohssine/data/wordpress`
+- MariaDB data: `/home/abausa-v/data/mariadb`
+- WordPress files: `/home/abausa-v/data/wordpress`
 
 These directories are automatically created by the Makefile's `build` target. If creating manually:
 
 ```bash
-mkdir -p /home/aohssine/data/mariadb
-mkdir -p /home/aohssine/data/wordpress
+mkdir -p /home/abausa-v/data/mariadb
+mkdir -p /home/abausa-v/data/wordpress
 ```
 
 **Permissions**: Ensure the directories are writable by the Docker daemon:
 
 ```bash
-sudo chown -R $USER:$USER /home/aohssine/data
-chmod -R 755 /home/aohssine/data
+sudo chown -R $USER:$USER /home/abausa-v/data
+chmod -R 755 /home/abausa-v/data
 ```
 
 ### Step 3: Configure /etc/hosts
@@ -73,12 +73,12 @@ chmod -R 755 /home/aohssine/data
 Add the domain name to your hosts file for local access:
 
 ```bash
-sudo echo "127.0.0.1    aohssine.42.fr" >> /etc/hosts
+sudo echo "YOUR IP    abausa-v.42.fr" >> /etc/hosts
 ```
 
 Or manually edit `/etc/hosts` and add:
 ```
-127.0.0.1    aohssine.42.fr
+YOUR ID    abausa-v.42.fr
 ```
 
 ## Building and Launching
@@ -97,7 +97,7 @@ The project uses a Makefile to simplify Docker Compose operations.
 
 **Command Equivalent**:
 ```bash
-mkdir -p /home/aohssine/data/mariadb /home/aohssine/data/wordpress
+mkdir -p /home/abausa-v/data/mariadb /home/abausa-v/data/wordpress
 docker compose -f ./srcs/docker-compose.yml up --build -d
 ```
 
@@ -150,14 +150,14 @@ docker compose -f ./srcs/docker-compose.yml down -v
 **Actions**:
 1. Runs `make clean`
 2. Removes all Docker system resources (images, containers, cache)
-3. Deletes all data from `/home/aohssine/data/` directories
+3. Deletes all data from `/home/abausa-v/data/` directories
 
 **Command Equivalent**:
 ```bash
 docker compose -f ./srcs/docker-compose.yml down -v
 docker system prune -a -f
-sudo rm -rf /home/aohssine/data/mariadb
-sudo rm -rf /home/aohssine/data/wordpress
+sudo rm -rf /home/abausa-v/data/mariadb
+sudo rm -rf /home/abausa-v/data/wordpress
 ```
 
 **⚠️ Warning**: This permanently deletes all data!
@@ -342,17 +342,19 @@ docker exec wordpress nc -zv mariadb 3306
         ├── mariadb/
         │   ├── Dockerfile            # MariaDB image definition
         │   ├── conf/
-        │   │   └── mariadb.conf      # MariaDB configuration
+        │   │   └── my.cnf            # MariaDB configuration
         │   └── tools/
         │       └── entrypoint.sh     # Database initialization script
         ├── wordpress/
         │   ├── Dockerfile            # WordPress image definition
-        │   ├── conf/
-        │   │   └── www.conf          # PHP-FPM configuration
+        |   ├── conf/
+        │   │   └── www.conf          # WordPress configuration
         │   └── tools/
-        │       └── setup.sh          # WordPress installation script
+        │       └── entrypoint.sh     # WordPress installation script
         └── nginx/
-            ├── Dockerfile            # Nginx image definition
+            ├── Dockerfile 
+            ├── tools/
+            │  └── entrypoint.sh      # Nginx installation script
             └── conf/
                 └── nginx.conf        # Nginx server configuration
 ```
@@ -365,7 +367,7 @@ docker exec wordpress nc -zv mariadb 3306
 **Purpose**: Builds a MariaDB database server
 
 **Key Steps**:
-- Base: Alpine Linux 3.22
+- Base: Debian 13.3
 - Installs MariaDB server and client
 - Creates necessary directories with correct permissions
 - Copies and makes executable the entrypoint script
@@ -377,7 +379,7 @@ docker exec wordpress nc -zv mariadb 3306
 **Purpose**: Builds a WordPress application server with PHP-FPM
 
 **Key Steps**:
-- Base: Alpine Linux 3.22
+- Base: Debian 13.3
 - Installs PHP 8.2 and required extensions
 - Installs WordPress CLI (wp-cli)
 - Installs MariaDB client for database communication
@@ -391,7 +393,7 @@ docker exec wordpress nc -zv mariadb 3306
 **Purpose**: Builds an Nginx web server with SSL/TLS
 
 **Key Steps**:
-- Base: Alpine Linux 3.22
+- Base: Debian 13.3
 - Installs Nginx and OpenSSL
 - Generates self-signed SSL certificate
 - Copies Nginx configuration
@@ -400,7 +402,7 @@ docker exec wordpress nc -zv mariadb 3306
 
 ### Configuration Files Locations
 
-- **MariaDB Config**: `srcs/requirements/mariadb/conf/mariadb.conf`
+- **MariaDB Config**: `srcs/requirements/mariadb/conf/my.cnf`
 - **PHP-FPM Config**: `srcs/requirements/wordpress/conf/www.conf`
 - **Nginx Config**: `srcs/requirements/nginx/conf/nginx.conf`
 - **Environment Variables**: `srcs/.env`
@@ -415,12 +417,12 @@ This project uses **bind mounts** instead of Docker-managed volumes for explicit
 #### Bind Mount Locations
 
 **MariaDB Data**:
-- **Host Path**: `/home/aohssine/data/mariadb`
+- **Host Path**: `/home/abausa-v/data/mariadb`
 - **Container Path**: `/var/lib/mysql`
 - **Purpose**: Stores database tables, indexes, and MariaDB system files
 
 **WordPress Data**:
-- **Host Path**: `/home/aohssine/data/wordpress`
+- **Host Path**: `/home/abausa-v/data/wordpress`
 - **Container Path**: `/var/www/html`
 - **Purpose**: Stores WordPress core files, themes, plugins, and uploads
 
@@ -435,13 +437,13 @@ This project uses **bind mounts** instead of Docker-managed volumes for explicit
        driver_opts:
          type: none
          o: bind
-         device: /home/aohssine/data/mariadb
+         device: /home/abausa-v/data/mariadb
    ```
 
 2. **Bind Mount Configuration**:
    - `type: none` with `o: bind` tells Docker to use a bind mount
    - `device:` specifies the host path
-   - Data written to `/var/lib/mysql` in the container appears in `/home/aohssine/data/mariadb` on the host
+   - Data written to `/var/lib/mysql` in the container appears in `/home/abausa-v/data/mariadb` on the host
 
 3. **Benefits**:
    - Data survives container removal (`docker rm`)
@@ -457,19 +459,19 @@ This project uses **bind mounts** instead of Docker-managed volumes for explicit
 Internet
     ↓ HTTPS (port 443)
 ┌─────────────────┐
-│   Nginx         │ ← Entry Point (Alpine 3.22)
+│   Nginx         │ ← Entry Point (Debian 13.3)
 │   Port: 443     │ ← SSL/TLS termination
 └────────┬────────┘
          │ FastCGI (port 9000)
          ↓
 ┌─────────────────┐
-│   WordPress     │ ← Application Logic (Alpine 3.22)
+│   WordPress     │ ← Application Logic (Debian 13.3)
 │   Port: 9000    │ ← PHP-FPM
 └────────┬────────┘
          │ MySQL Protocol (port 3306)
          ↓
 ┌─────────────────┐
-│   MariaDB       │ ← Database (Alpine 3.22)
+│   MariaDB       │ ← Database (Debian 13.3)
 │   Port: 3306    │ ← Data Storage
 └─────────────────┘
 ```
@@ -548,14 +550,14 @@ docker network inspect inception
 openssl req -x509 -nodes \
   -out /etc/nginx/ssl/inception.crt \
   -keyout /etc/nginx/ssl/inception.key \
-  -subj "/C=FR/ST=IDF/L=Paris/O=42/OU=42/CN=aohssine.42.fr/UID=aohssine"
+  -subj "/C=FR/ST=IDF/L=Paris/O=42/OU=42/CN=abausa-v.42.fr/UID=abausa-v"
 ```
 
 **Certificate Details**:
 - Type: Self-signed X.509 certificate
 - Algorithm: RSA (default)
 - No passphrase (`-nodes` flag)
-- Subject: CN=aohssine.42.fr
+- Subject: CN=abausa-v.42.fr
 
 #### Nginx SSL Configuration
 
@@ -634,7 +636,7 @@ docker exec <container-name> env
    ```
 
 3. **Functional Testing**:
-   - Access https://aohssine.42.fr
+   - Access https://abausa-v.42.fr
    - Login to WordPress admin
    - Create a test post
    - Verify data persists after `make down` and `make run`
@@ -653,4 +655,4 @@ For technical issues or questions:
 - Review container logs: `docker logs <container-name>`
 - Check Docker network: `docker network inspect inception`
 - Consult the USER_DOC.md for operational guidance
-- Contact: aohssine@student.42.fr
+- Contact: abausa-v@student.42.fr

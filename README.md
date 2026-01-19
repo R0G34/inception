@@ -1,18 +1,16 @@
 # Inception - 42 Project  
-*This project has been created as part of the 42 curriculum by aohssine.*
+*This project has been created as part of the 42 curriculum by abausa-v.*
 
 ## Description
 
 Inception is a system administration project designed to deepen understanding of Docker virtualization technology. The core objective is to virtualize several Docker images by creating them within a personal virtual machine. Instead of relying on ready-made images, the project requires building a custom infrastructure from scratch using Dockerfiles for each service.
 
 
-
-
 The project involves setting up a small, resilient infrastructure composed of distinct services, each running in a dedicated container to mimic a microservices architecture.
 
 
 ### Main Design Choices
-- Base Image: The infrastructure is built upon Alpine Linux. This choice aligns with the requirement to use either Alpine or Debian for performance reasons. Alpine was selected for its extremely lightweight footprint (approx. 5MB) and security-focused design.
+- Base Image: The infrastructure is built upon Debian Linux. This choice aligns with the requirement to use either Alpine or Debian for performance reasons. Debian was selected because I already did a VM project with Debian as the os.
 
 
 - Orchestration: Docker Compose is used to manage the multi-container application, defining services, networks, and volumes in a single YAML file.
@@ -62,8 +60,8 @@ The project involves setting up a small, resilient infrastructure composed of di
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/OhssineAbdelfatah/42_inception.git
-   cd 42_inception
+   git clone https://github.com/R0G34/inception
+   cd inception
    ```
 
 2. **Configure environment variables:**
@@ -73,7 +71,7 @@ The project involves setting up a small, resilient infrastructure composed of di
      - Domain name (e.g., `login.42.fr`)
 
 3. **Update paths (if necessary):**
-   - The Makefile and docker-compose.yml use `/home/aohssine/data/` as the default path for bind mounts.
+   - The Makefile and docker-compose.yml use `/home/abausa-v/data/` as the default path for bind mounts.
    - Update these paths to match your VM username (e.g., `/home/your-login/data/`).
 
 ### Compilation & Execution

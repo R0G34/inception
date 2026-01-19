@@ -10,21 +10,21 @@ This project consists of three interconnected services running in isolated Docke
 
 ### 1. MariaDB
 - **Purpose**: Database server for storing WordPress data
-- **Technology**: MariaDB 10.x on Alpine Linux 3.22
+- **Technology**: MariaDB 10.x on Debian Linux 13.3
 - **Function**: Stores all WordPress content including posts, pages, users, settings, and plugins data
 - **Internal Port**: 3306 (not exposed to host)
 - **Access**: Only accessible by the WordPress container via Docker network
 
 ### 2. WordPress
 - **Purpose**: Content Management System (CMS) for website management
-- **Technology**: WordPress with PHP 8.2-FPM on Alpine Linux 3.22
+- **Technology**: WordPress with PHP 8.2-FPM on Debian Linux 13.3
 - **Function**: Provides the web application logic and serves dynamic content
 - **Internal Port**: 9000 (PHP-FPM)
 - **Access**: Communicates with MariaDB for data and with Nginx for serving requests
 
 ### 3. Nginx
 - **Purpose**: Web server and reverse proxy
-- **Technology**: Nginx on Alpine Linux 3.22 with SSL/TLS encryption
+- **Technology**: Nginx on Debian Linux 13.3 with SSL/TLS encryption
 - **Function**: Entry point for all web traffic, handles HTTPS connections, and proxies requests to WordPress
 - **Exposed Port**: 443 (HTTPS)
 - **Security**: Enforces TLSv1.2 and TLSv1.3 protocols for secure connections
@@ -45,7 +45,7 @@ make all
 ```
 
 This command will:
-1. Create necessary data directories (`/home/aohssine/data/mariadb` and `/home/aohssine/data/wordpress`)
+1. Create necessary data directories (`/home/abausa-v/data/mariadb` and `/home/abausa-v/data/wordpress`)
 2. Build Docker images for all three services
 3. Start all containers in detached mode
 
@@ -75,7 +75,7 @@ To stop containers and remove all Docker volumes:
 make clean
 ```
 
-⚠️ **Warning**: This will stop containers and remove volumes, but data in `/home/aohssine/data/` will remain.
+⚠️ **Warning**: This will stop containers and remove volumes, but data in `/home/abausa-v/data/` will remain.
 
 ### Complete Cleanup
 For a complete cleanup including all Docker resources and data:
@@ -88,7 +88,7 @@ make fclean
 - Stop all containers
 - Remove all Docker volumes
 - Delete all Docker images, containers, and build cache
-- **Permanently delete** all data from `/home/aohssine/data/mariadb` and `/home/aohssine/data/wordpress`
+- **Permanently delete** all data from `/home/abausa-v/data/mariadb` and `/home/abausa-v/data/wordpress`
 
 **Your database and website files will be permanently lost. Use with caution!**
 
@@ -99,7 +99,7 @@ make fclean
 Open your web browser and navigate to:
 
 ```
-https://aohssine.42.fr
+https://abausa-v.42.fr
 ```
 
 **Note**: Since this uses a self-signed SSL certificate, your browser will display a security warning. This is expected behavior. Click "Advanced" and proceed to the site.
@@ -107,7 +107,7 @@ https://aohssine.42.fr
 **Host File Configuration**: Ensure your `/etc/hosts` file contains the following entry:
 
 ```
-127.0.0.1    aohssine.42.fr
+YOUR IP    abausa-v.42.fr
 ```
 
 ### Access the WordPress Admin Panel
@@ -115,7 +115,7 @@ https://aohssine.42.fr
 To manage your WordPress site (create posts, install plugins, etc.):
 
 ```
-https://aohssine.42.fr/wp-admin
+https://abausa-v.42.fr/wp-admin
 ```
 
 Log in using the administrator credentials (see Credentials Management section below).
@@ -201,13 +201,13 @@ Press `Ctrl+C` to stop following logs.
 
 **Command-line test:**
 ```bash
-curl -k https://aohssine.42.fr
+curl -k https://abausa-v.42.fr
 ```
 
 The `-k` flag allows insecure connections (self-signed certificate). You should receive HTML output from WordPress.
 
 **Browser test:**
-Simply navigate to `https://aohssine.42.fr` in your web browser.
+Simply navigate to `https://abausa-v.42.fr` in your web browser.
 
 ### Verify Database Connection
 
@@ -242,8 +242,8 @@ You should see:
 To check the actual data on the host:
 
 ```bash
-ls -la /home/aohssine/data/mariadb
-ls -la /home/aohssine/data/wordpress
+ls -la /home/abausa-v/data/mariadb
+ls -la /home/abausa-v/data/wordpress
 ```
 
 These directories should contain database files and WordPress files respectively.
@@ -279,8 +279,8 @@ To backup your WordPress site and database:
 mkdir -p ~/inception-backup
 
 # Copy data
-sudo cp -r /home/aohssine/data/mariadb ~/inception-backup/
-sudo cp -r /home/aohssine/data/wordpress ~/inception-backup/
+sudo cp -r /home/abausa-v/data/mariadb ~/inception-backup/
+sudo cp -r /home/abausa-v/data/wordpress ~/inception-backup/
 sudo cp srcs/.env ~/inception-backup/
 ```
 
@@ -292,10 +292,10 @@ To restore from a backup:
 make down
 
 # Restore data
-sudo rm -rf /home/aohssine/data/mariadb/*
-sudo rm -rf /home/aohssine/data/wordpress/*
-sudo cp -r ~/inception-backup/mariadb/* /home/aohssine/data/mariadb/
-sudo cp -r ~/inception-backup/wordpress/* /home/aohssine/data/wordpress/
+sudo rm -rf /home/abausa-v/data/mariadb/*
+sudo rm -rf /home/abausa-v/data/wordpress/*
+sudo cp -r ~/inception-backup/mariadb/* /home/abausa-v/data/mariadb/
+sudo cp -r ~/inception-backup/wordpress/* /home/abausa-v/data/wordpress/
 
 # Restart services
 make run
@@ -307,4 +307,4 @@ For issues or questions:
 1. Check the logs as described in the Service Health Checks section
 2. Review the DEV_DOC.md for technical details
 3. Consult the 42 Inception project subject
-4. Contact the project maintainer: aohssine@student.42.fr
+4. Contact the project maintainer: abausa-v@student.42madrid.com
