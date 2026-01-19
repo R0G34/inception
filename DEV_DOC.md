@@ -73,12 +73,12 @@ chmod -R 755 /home/abausa-v/data
 Add the domain name to your hosts file for local access:
 
 ```bash
-sudo echo "YOUR IP    abausa-v.42.fr" >> /etc/hosts
+sudo echo "<VM_IP> abausa-v.42.fr" | sudo tee -a /etc/hosts
 ```
 
 Or manually edit `/etc/hosts` and add:
 ```
-YOUR ID    abausa-v.42.fr
+<VM_IP> abausa-v.42.fr
 ```
 
 ## Building and Launching
@@ -367,7 +367,7 @@ docker exec wordpress nc -zv mariadb 3306
 **Purpose**: Builds a MariaDB database server
 
 **Key Steps**:
-- Base: Debian 13.3
+- Base: Debian 12
 - Installs MariaDB server and client
 - Creates necessary directories with correct permissions
 - Copies and makes executable the entrypoint script
@@ -379,7 +379,7 @@ docker exec wordpress nc -zv mariadb 3306
 **Purpose**: Builds a WordPress application server with PHP-FPM
 
 **Key Steps**:
-- Base: Debian 13.3
+- Base: Debian 12
 - Installs PHP 8.2 and required extensions
 - Installs WordPress CLI (wp-cli)
 - Installs MariaDB client for database communication
@@ -393,7 +393,7 @@ docker exec wordpress nc -zv mariadb 3306
 **Purpose**: Builds an Nginx web server with SSL/TLS
 
 **Key Steps**:
-- Base: Debian 13.3
+- Base: Debian 12
 - Installs Nginx and OpenSSL
 - Generates self-signed SSL certificate
 - Copies Nginx configuration
@@ -459,19 +459,19 @@ This project uses **bind mounts** instead of Docker-managed volumes for explicit
 Internet
     ↓ HTTPS (port 443)
 ┌─────────────────┐
-│   Nginx         │ ← Entry Point (Debian 13.3)
+│   Nginx         │ ← Entry Point (Debian 12)
 │   Port: 443     │ ← SSL/TLS termination
 └────────┬────────┘
          │ FastCGI (port 9000)
          ↓
 ┌─────────────────┐
-│   WordPress     │ ← Application Logic (Debian 13.3)
+│   WordPress     │ ← Application Logic (Debian 12)
 │   Port: 9000    │ ← PHP-FPM
 └────────┬────────┘
          │ MySQL Protocol (port 3306)
          ↓
 ┌─────────────────┐
-│   MariaDB       │ ← Database (Debian 13.3)
+│   MariaDB       │ ← Database (Debian 12)
 │   Port: 3306    │ ← Data Storage
 └─────────────────┘
 ```
@@ -492,7 +492,7 @@ Internet
 3. **WordPress → MariaDB**:
    - Protocol: MySQL protocol
    - Port: 3306 (internal Docker network)
-   - Connection: `SQL_HOST=mariadb` in `.env`
+   - Connection: `--dbhost="mariadb"` in `.env`
    - Purpose: Database queries and data persistence
 
 ### Network Configuration

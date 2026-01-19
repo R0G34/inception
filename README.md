@@ -10,7 +10,7 @@ The project involves setting up a small, resilient infrastructure composed of di
 
 
 ### Main Design Choices
-- Base Image: The infrastructure is built upon Debian Linux. This choice aligns with the requirement to use either Alpine or Debian for performance reasons. Debian was selected because I already did a VM project with Debian as the os.
+- Base Image: The infrastructure is built upon Debian. This choice aligns with the requirement to use either Alpine or Debian for performance reasons.
 
 
 - Orchestration: Docker Compose is used to manage the multi-container application, defining services, networks, and volumes in a single YAML file.
@@ -46,7 +46,7 @@ The project involves setting up a small, resilient infrastructure composed of di
 - Docker Volumes: Storage areas managed entirely by Docker (usually in /var/lib/docker/volumes/). They are the standard for data persistence but are hidden deep in the system files.
 
 
-- Bind Mounts: These map a specific user-defined directory on the host machine (e.g., /home/login/data/) to a path inside the container. This project requires bind mounts so that the database and website files are stored in a specific, accessible location on the host VM.
+- Bind Mounts: These map a specific user-defined directory on the host machine (e.g., /home/abausa-v/data/) to a path inside the container. This project requires bind mounts so that the database and website files are stored in a specific, accessible location on the host VM.
 
 ## Instructions
 
@@ -68,11 +68,11 @@ The project involves setting up a small, resilient infrastructure composed of di
    - Create or edit the `.env` file in the `srcs` directory with your credentials:
      - Database credentials (root password, database name, user, password)
      - WordPress configuration (database host, admin credentials, site URL)
-     - Domain name (e.g., `login.42.fr`)
+     - Domain name (e.g., `abausa-v.42.fr`)
 
 3. **Update paths (if necessary):**
    - The Makefile and docker-compose.yml use `/home/abausa-v/data/` as the default path for bind mounts.
-   - Update these paths to match your VM username (e.g., `/home/your-login/data/`).
+   - Update these paths to match your VM username (e.g., `/home/abausa-v/data/`).
 
 ### Compilation & Execution
 
@@ -118,7 +118,7 @@ You should see three containers: `nginx`, `wordpress`, and `mariadb`.
 - **Docker Compose Documentation**: [https://docs.docker.com/compose/](https://docs.docker.com/compose/)
   - Reference for multi-container orchestration and compose file syntax
 
-- **Alpine Linux**: [https://alpinelinux.org/](https://alpinelinux.org/)
+- **Debian**: [https://hub.docker.com/layers/library/debian/bookworm-slim/images/sha256-94882f177083c7fa6764b9ef2a86ed3c29c99593b34d5441648a7fb3c0cd10ec](https://hub.docker.com/layers/library/debian/bookworm-slim/images/sha256-94882f177083c7fa6764b9ef2a86ed3c29c99593b34d5441648a7fb3c0cd10ec)
   - Official documentation for the base image used in this project
 
 - **NGINX Documentation**: [https://nginx.org/en/docs/](https://nginx.org/en/docs/)

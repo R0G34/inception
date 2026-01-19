@@ -1,5 +1,6 @@
 services:
   mariadb:
+    image: mariadb_inception:1.0
     build:
       context: ./requirements/mariadb
       dockerfile: Dockerfile
@@ -13,6 +14,7 @@ services:
       - inception
 
   wordpress:
+    image: wordpress_inception:1.0
     build:
       context: ./requirements/wordpress
       dockerfile: Dockerfile
@@ -27,9 +29,10 @@ services:
     networks:
       - inception
     expose:
-       - "9000"
+      - "9000"
 
   nginx:
+    image: nginx_inception:1.0
     build:
       context: ./requirements/nginx
       dockerfile: Dockerfile

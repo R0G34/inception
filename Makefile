@@ -17,4 +17,6 @@ fclean: clean
 	sudo rm -rf /home/abausa-v/data/mariadb
 	sudo rm -rf /home/abausa-v/data/wordpress
 
-re: down fclean build run
+re: fclean all
+
+.PHONY: all build run down clean fclean re

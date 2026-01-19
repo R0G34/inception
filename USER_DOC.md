@@ -10,21 +10,21 @@ This project consists of three interconnected services running in isolated Docke
 
 ### 1. MariaDB
 - **Purpose**: Database server for storing WordPress data
-- **Technology**: MariaDB 10.x on Debian Linux 13.3
+- **Technology**: MariaDB 10.x on debian:bookworm-slim
 - **Function**: Stores all WordPress content including posts, pages, users, settings, and plugins data
 - **Internal Port**: 3306 (not exposed to host)
 - **Access**: Only accessible by the WordPress container via Docker network
 
 ### 2. WordPress
 - **Purpose**: Content Management System (CMS) for website management
-- **Technology**: WordPress with PHP 8.2-FPM on Debian Linux 13.3
+- **Technology**: WordPress with PHP 8.2-FPM on debian:bookworm-slim
 - **Function**: Provides the web application logic and serves dynamic content
 - **Internal Port**: 9000 (PHP-FPM)
 - **Access**: Communicates with MariaDB for data and with Nginx for serving requests
 
 ### 3. Nginx
 - **Purpose**: Web server and reverse proxy
-- **Technology**: Nginx on Debian Linux 13.3 with SSL/TLS encryption
+- **Technology**: Nginx on debian:bookworm-slim with SSL/TLS encryption
 - **Function**: Entry point for all web traffic, handles HTTPS connections, and proxies requests to WordPress
 - **Exposed Port**: 443 (HTTPS)
 - **Security**: Enforces TLSv1.2 and TLSv1.3 protocols for secure connections
@@ -107,7 +107,7 @@ https://abausa-v.42.fr
 **Host File Configuration**: Ensure your `/etc/hosts` file contains the following entry:
 
 ```
-YOUR IP    abausa-v.42.fr
+<VM_IP> abausa-v.42.fr
 ```
 
 ### Access the WordPress Admin Panel
@@ -132,25 +132,25 @@ srcs/.env
 ### Administrator Credentials
 Use these credentials to log into the WordPress admin panel (`/wp-admin`):
 
-- **Username**: Value of `ADMIN_USER` in `.env`
-- **Password**: Value of `ADMIN_PASSWORD` in `.env`
-- **Email**: Value of `ADMIN_EMAIL` in `.env`
+- **Username**: Value of `WP_ADMIN_USER` in `.env`
+- **Password**: Value of `WP_ADMIN_PASSWORD` in `.env`
+- **Email**: Value of `WP_ADMIN_EMAIL` in `.env`
 
 ### Database Credentials
 These are used internally by WordPress to connect to MariaDB:
 
-- **Database Name**: `SQL_DATABASE` 
-- **Database User**: `SQL_USER`
-- **Database Password**: `SQL_PASSWORD`
-- **Database Root Password**: `SQL_ROOT_PASSWORD`
-- **Database Host**: `SQL_HOST`
+- **Database Name**: `MYSQL_DATABASE` 
+- **Database User**: `MYSQL_USER`
+- **Database Password**: `MYSQL_PASSWORD`
+- **Database Root Password**: `MYSQL_ROOT_PASSWORD`
+- **Database Host**: `mariadb`
 
 ### Additional User Credentials
 A secondary WordPress user is also created:
 
-- **Username**: Value of `USER1_LOGIN` in `.env`
-- **Password**: Value of `USER1_PASSWORD` in `.env`
-- **Email**: Value of `USER1_EMAIL` in `.env`
+- **Username**: Value of `WP_USER_USER` in `.env`
+- **Password**: Value of `WP_USER_PASSWORD` in `.env`
+- **Email**: Value of `WP_USER_EMAIL` in `.env`
 
 **Security Recommendation**: Change all default passwords in the `.env` file before deploying to production.
 
@@ -236,8 +236,8 @@ docker volume ls
 ```
 
 You should see:
-- `mariadb-vol`
-- `wordpress-vol`
+- `mariadb_data`
+- `wordpress_data`
 
 To check the actual data on the host:
 
